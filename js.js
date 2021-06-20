@@ -9,19 +9,32 @@ var button= document.querySelector('.submit');
 
 
 button.addEventListener('click', function(name){
-fetch('https://api.openweathermap.org/data/2.5/weather?q=Zagreb&appid=361a26434899ac82d3afdd691b3f702f')
-.then(response => response.json())
-.then(data => {
-  var tempValue = data['main']['temp'];
-  var nameValue = data['name'];
-  var descValue = data['weather'][0]['description'];
 
-  main.innerHTML = nameValue;
-  desc.innerHTML = "Desc - "+input1.value;
-  temp.innerHTML = "Current temperature in Zagreb is - "+tempValue;
-  input.value ="";
+  getTemperature();
+ })
 
-})
 
-.catch(err => alert("Wrong city name!"));
-})
+function getTemperature () {
+  let url = 'https://api.openweathermap.org/data/2.5/weather?q='+input.value+'&appid=361a26434899ac82d3afdd691b3f702f'
+  fetch(url)
+  .then(response => response.json())
+  .then(data => {
+    var tempValue = (data['main']['temp'] - 273).toFixed(1);
+    var nameValue = data['name'];
+    var descValue = data['weather'][0]['description'];
+  
+    main.innerHTML = nameValue;
+    desc.innerHTML = "Desc - "+input1.value;
+    temp.innerHTML = "Current temperature in Zagreb is "+tempValue + "°C";
+    input.value ="";
+    
+    return tempValue;
+
+  
+  })
+  
+  .catch(err => alert("Wrong city name!"));
+  }
+
+
+  module.exports = getTemperature
